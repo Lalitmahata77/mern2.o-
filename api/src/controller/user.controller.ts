@@ -68,7 +68,7 @@ class authController{
 
         if (!email || !password) {
             res.status(400).json({
-                message : "Plesae provide username, password"
+                message : "Plesae provide email, password"
             })
         }
         const [data] = await User.findAll({where : {

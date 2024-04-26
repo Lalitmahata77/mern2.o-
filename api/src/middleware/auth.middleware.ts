@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import User from '../database/models/user.model'
 
 
-interface AuthRequest extends Request{
+export interface AuthRequest extends Request{
     user?:{
         username : string, 
         email : string, 
@@ -13,7 +13,7 @@ interface AuthRequest extends Request{
     }
 }
 
-enum Role{
+export enum Role{
     Admin = 'admin',
     Customer = 'customer'
 }
