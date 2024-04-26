@@ -21,7 +21,7 @@ class User extends Model{
 
    @Column({
     type : DataType.STRING,
-    unique : true
+    
    })
    declare username : string
 
@@ -30,6 +30,13 @@ class User extends Model{
     unique : true
    })
    declare email : string
+
+   @Column({
+    type : DataType.ENUM('customer','admin'),
+    defaultValue : 'customer'
+})
+
+declare role : string
 
    @Column({
     type : DataType.STRING

@@ -2,11 +2,11 @@
 import { Request, Response } from "express";
 import User from "../database/models/user.model";
 import becrypt from "bcryptjs"
-
+import  Jwt  from "jsonwebtoken";
 class authController{
     public static async registerUser(req:Request, res:Response):Promise<void>{
         try {
-            const {username, password, email} = req.body
+            const {username, password, email, role} = req.body
             if (!username || !password || !email) {
                 res.status(400).json({
                     message : "Please provide username, email, password"
@@ -39,7 +39,8 @@ class authController{
          const newUser = await new User({
             username,
             email,
-            password : hashedPassword
+            password : hashedPassword,
+            role : role
          })
          if (newUser) {
             newUser.save()
@@ -55,12 +56,50 @@ class authController{
             })
          }
     
-        } catch (error) {
+        } catch (error:any) {
             res.status(500).json({
-                message : "Internal server error"
+                message : error.message
             })
         }
     }
+
+    public static async loginUser(req:Request, res:Response):Promise<void>{
+        const {email, password} = req.body
+
+        if (!email || !password) {
+            res.status(400).json({
+                message : "Plesae provide username, password"
+            })
+        }
+        const [data] = await User.findAll({where : {
+            email : email
+        }})
+
+        if (!data) {
+            res.status(401).json({
+                message : "No user with that email"
+            })
+        }
+
+        const isPasswordCorrect = await becrypt.compare(password, data.password)
+        if (!isPasswordCorrect) {
+            res.status(403).json({
+                message : "Invalid password"
+            })
+        }
+
+           // generate token 
+       const token  =  Jwt.sign({id:data.id},process.env.SECRET_KEY as string ,{
+        expiresIn : "20d"
+    })
+    res.status(200).json({
+        message : "Logged in successfully",
+        data : token
+    })
+
+    }
+
+    
 }
 
 export default authController

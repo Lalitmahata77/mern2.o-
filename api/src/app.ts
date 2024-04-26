@@ -5,8 +5,10 @@ import * as dotenv from "dotenv"
 dotenv.config()
 import './database/connection'
 import authRoute from "./routes/auth.route"
+import adminSeeder from './adminSeder'
 app.use(express.json())
-
+//admin seeder
+adminSeeder()
 
 app.use("/api/auth/", authRoute)
 
