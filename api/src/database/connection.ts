@@ -3,6 +3,9 @@ import User from "./models/user.model"
 import Product from "./models/product.model"
 import Category from "./models/category.model"
 import Cart from "./models/cart.model"
+import Order from "./models/order.model"
+import OrderDetail from "./models/orderDetails.model"
+import Payment from "./models/pyment.model"
 
 const sequelize = new Sequelize({
     database : process.env.DB_NAME,
@@ -40,5 +43,22 @@ Cart.belongsTo(User,{foreignKey : 'userId'})
 //user cart relation
 Product.hasMany(Cart,{foreignKey:'productId'})
 Cart.belongsTo(Product,{foreignKey:'productId'})
+
+// order-orderdetail relation
+Order.hasMany(OrderDetail,{foreignKey:'orderId'})
+OrderDetail.belongsTo(Order,{foreignKey:'orderId'})
+
+// orderdetail-product relation 
+Product.hasMany(OrderDetail,{foreignKey:'productId'})
+OrderDetail.belongsTo(Product,{foreignKey:'productId'})
+
+//order-payment relation 
+Payment.hasOne(Order,{foreignKey:'paymentId'})
+Order.belongsTo(Payment,{foreignKey:'paymentId'})
+
+//order-user relation 
+User.hasMany(Order,{foreignKey : 'userId'})
+Order.belongsTo(User,{foreignKey : 'userId'})
+
 
 export default sequelize
