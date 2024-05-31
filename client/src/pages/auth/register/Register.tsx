@@ -1,14 +1,25 @@
+import { useNavigate } from "react-router-dom"
+import { register, resetStatus } from "../../../store/authSlice"
+import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import Form from "../Form"
-import { UserDataTypes } from "../types"
-import axios from "axios"
+import { UserDataType } from "../types"
+import { useEffect } from "react"
+import { Status } from "../../../global/types/Types"
+
 
 const Register = () => {
-  const handleRegister =async(data:UserDataTypes)=>{
-    // console.log(data);
-    const response = await axios.post('http://localhost:3000/register',data)
-    
-
+  const navigate = useNavigate()
+  const {status} = useAppSelector((state)=>state.auth)
+  const dispatch = useAppDispatch()
+  const handleRegister =async(data:UserDataType)=>{
+    dispatch(register(data))
   }
+  useEffect(()=>{
+    if (status === Status.SUCCESS) {
+      dispatch(resetStatus())
+      navigate("/login")
+    }
+  },[status])
   return (
     <Form type="register" onSubmit = {handleRegister}/>
   )

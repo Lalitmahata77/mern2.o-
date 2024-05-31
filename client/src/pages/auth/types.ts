@@ -1,11 +1,15 @@
 export interface Props {
     type : string,
-    onSubmit : (data:UserDataTypes)=> void
+    onSubmit : (data:UserDataType)=> void
     
   }
 
-  export interface UserDataTypes{
+  export interface UserDataType{
     username : string,
     email : string,
+    password : string
+  }
+  export interface UserLoginType{
+    email : string, 
     password : string
   }
