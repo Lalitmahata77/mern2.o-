@@ -1,5 +1,5 @@
 import {createSlice,PayloadAction} from "@reduxjs/toolkit"
-import API from "../http"
+import {API} from "../http"
 import { Status } from "../global/types/Types"
 
 interface RegisterData{
@@ -56,7 +56,7 @@ export function register(data : RegisterData){
     return async function registerThunk(dispatch:any){
         dispatch(setStatus(Status.LOADING))
         try {
-         const response =   await API.post("register", data)
+         const response =   await API.post("api/auth/register", data)
          if (response.status === 200) {
             dispatch(setStatus(Status.SUCCESS))
          }else{
@@ -74,7 +74,7 @@ export function login(data:LoginData){
     return async function loginThunk(dispatch:any){
         dispatch(setStatus(Status.LOADING))
         try {
-            const response = await API.post('login',data)
+            const response = await API.post('api/auth/login',data)
             if(response.status === 200){
                 const {data} = response.data
                 dispatch(setStatus(Status.SUCCESS))
