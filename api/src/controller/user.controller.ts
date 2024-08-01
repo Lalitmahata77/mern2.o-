@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import User from "../database/models/user.model";
 import becrypt from "bcryptjs"
 import  Jwt  from "jsonwebtoken";
+import { AuthRequest } from "../middleware/auth.middleware";
 class authController{
     public static async registerUser(req:Request, res:Response):Promise<void>{
         try {
@@ -97,6 +98,22 @@ class authController{
         data : token
     })
 
+    }
+
+    public static async fetchUsers(req:AuthRequest,res:Response):Promise<void>{
+
+        const users = await User.findAll()
+        if(users.length > 0 ){
+            res.status(200).json({
+                message : "order fetched successfully",
+                data : users
+            })
+        }else{
+            res.status(404).json({
+                message : "you haven't ordered anything yet..",
+                data : []
+            })
+        }
     }
 
     
